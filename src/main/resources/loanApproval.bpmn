@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_DdZocL47EeOQo_IRkjDF6w" targetNamespace="http://camunda.org/schema/1.0/bpmn" exporter="Camunda Modeler" exporterVersion="1.12.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="loanApproval" name="Loan Approval" isExecutable="true">
+    <bpmn2:startEvent id="StartEvent_1" name="Loan Request&#10;&#10;Received" camunda:initiator="requestor">
+      <bpmn2:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="firstname" label="Firstname" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="minlength" config="2" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="amount" label="Amount" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="min" config="1000" />
+              <camunda:constraint name="max" config="100000" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_1" targetRef="Task_0dfv74n" />
+    <bpmn2:endEvent id="EndEvent_1" name="Loan Request&#10;Processed">
+      <bpmn2:incoming>SequenceFlow_072m87q</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:userTask id="Task_0dfv74n" name="Check the request">
+      <bpmn2:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="firstname" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="amount" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="approved" type="boolean" />
+        </camunda:formData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:incoming>SequenceFlow_0os3gpm</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_18cfo10</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="ExclusiveGateway_0ie8fbc">
+      <bpmn2:incoming>SequenceFlow_18cfo10</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_072m87q</bpmn2:outgoing>
+      <bpmn2:outgoing>SequenceFlow_1jdggpd</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:sequenceFlow id="SequenceFlow_18cfo10" sourceRef="Task_0dfv74n" targetRef="ExclusiveGateway_0ie8fbc" />
+    <bpmn2:sequenceFlow id="SequenceFlow_072m87q" name="yes" sourceRef="ExclusiveGateway_0ie8fbc" targetRef="EndEvent_1">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${approved == true}</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="SequenceFlow_1jdggpd" name="no" sourceRef="ExclusiveGateway_0ie8fbc" targetRef="Task_081kgb8">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${approved == false}</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:userTask id="Task_081kgb8" name="Adjust Amount" camunda:assignee="requestor">
+      <bpmn2:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="firstname" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="amount" label="Amount" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="min" config="1000" />
+              <camunda:constraint name="max" config="100000" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>SequenceFlow_1jdggpd</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_0os3gpm</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_0os3gpm" sourceRef="Task_081kgb8" targetRef="Task_0dfv74n" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="loanApproval">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_3" bpmnElement="StartEvent_1">
+        <dc:Bounds x="220" y="164" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="204" y="200" width="69" height="25" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="_BPMNShape_StartEvent_3" targetElement="UserTask_0k9otqc_di">
+        <di:waypoint x="256" y="182" />
+        <di:waypoint x="314" y="182" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="240" y="157" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_3" bpmnElement="EndEvent_1">
+        <dc:Bounds x="602" y="164" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="586" y="200" width="69" height="25" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0k9otqc_di" bpmnElement="Task_0dfv74n">
+        <dc:Bounds x="314" y="142" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0ie8fbc_di" bpmnElement="ExclusiveGateway_0ie8fbc" isMarkerVisible="true">
+        <dc:Bounds x="477" y="157" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="502" y="133.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_18cfo10_di" bpmnElement="SequenceFlow_18cfo10">
+        <di:waypoint x="414" y="182" />
+        <di:waypoint x="477" y="182" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445.5" y="160.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_072m87q_di" bpmnElement="SequenceFlow_072m87q">
+        <di:waypoint x="527" y="182" />
+        <di:waypoint x="602" y="182" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="556" y="160" width="18" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1jdggpd_di" bpmnElement="SequenceFlow_1jdggpd">
+        <di:waypoint x="502" y="207" />
+        <di:waypoint x="502" y="318" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="511" y="256" width="13" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1fj9m30_di" bpmnElement="Task_081kgb8">
+        <dc:Bounds x="452" y="318" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0os3gpm_di" bpmnElement="SequenceFlow_0os3gpm">
+        <di:waypoint x="452" y="358" />
+        <di:waypoint x="364" y="358" />
+        <di:waypoint x="364" y="222" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="408" y="336.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

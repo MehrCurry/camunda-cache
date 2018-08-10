@@ -1,0 +1,11 @@
+= Camunda Cache Example
+
+This example create a simple BPMN process and listen to
+History Events. When the event belongs to a task it
+will try to fetch the task and put it into the cache.
+
+Start with
+
+    ./gradlew bootRun
+
+then open http://localhost:9090/app/tasklist/
