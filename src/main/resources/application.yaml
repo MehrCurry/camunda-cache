@@ -1,6 +1,20 @@
 server:
   port: 9090
 
+# data source config
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:32770/camunda?createDatabaseIfNotExist=true
+    username: root
+    password: camunda123
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 camunda.bpm:
   admin-user:
     id: kermit
@@ -8,3 +22,8 @@ camunda.bpm:
     firstName: Kermit
   filter:
     create: All tasks
+  database:
+    type: mysql
+logging:
+  level:
+    com.example: DEBUG

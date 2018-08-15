@@ -2,6 +2,7 @@ package com.example.demo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.ManagementService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.cache.CacheManager;
@@ -13,15 +14,14 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.HazelcastConfig.TASKS_CACHE;
-
 @Lazy
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {TASKS_CACHE})
+@CacheConfig(cacheNames = {"tasks"})
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
+    private final ManagementService managementService;
     private final CacheManager cacheManager;
 
     /**

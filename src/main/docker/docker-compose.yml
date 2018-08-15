@@ -1,0 +1,34 @@
+version: '2'
+services:
+  frontend:
+    image: cnote/demo:0.0.1-snapshot
+    depends_on:
+      - database
+    ports:
+      - 9090-9099:9090
+    environment:
+    - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/camunda?createDatabaseIfNotExist=true
+  database:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=camunda123
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - 33306:3306
+  #management center
+  management-center:
+    image: hazelcast/management-center
+    # persisting mancenter users db folder to local disk
+    volumes:
+    - mancenter_data:/mancenter-3.9
+    environment:
+    - MANCENTER_DATA=/mancenter-3.9
+    # enable REST interface on management center
+    # http://docs.hazelcast.org/docs/latest-development/manual/html/Management/Clustered_REST_via_Management_Center.html
+    - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
+    ports:
+    - 8080:8080
+volumes:
+  mancenter_data:
+  mariadb_data:

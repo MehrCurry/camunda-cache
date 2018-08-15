@@ -9,3 +9,26 @@ Start with
     ./gradlew bootRun
 
 then open http://localhost:9090/app/tasklist/
+
+== Cluster
+
+Using docker you can create a clustered environtment.
+
+=== Build Docker Image
+
+[source,bash]
+....
+./gradlew dockerBuildImage
+docker-compose -f src/main/docker/docker-compose.yml up -d --scale frontend=2
+....
+
+You can then open Camunda at http://localhost:9090/app/tasklist
+
+The port number may change as docker-compose assigns them in the range of http://localhost:909[0-9]/app/tasklist
+
+Also the Hazelcast Mancenter is availible: http://localhost:8080/hazelcast-mancenter/cnote
+
+At the first step you have to create a user in the Mancenter.
+
+
+

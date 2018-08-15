@@ -40,7 +40,6 @@ public class CacheEvictController implements HistoryEventHandler {
         // add more events as needed
 
         if (taskId!=null) {
-            // taskController.evict(taskId);
             taskController.getTaskFromCamundaById(taskId);
         }
     }
